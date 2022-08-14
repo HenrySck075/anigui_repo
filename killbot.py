@@ -72,7 +72,7 @@ def newEpCheck(updateRemiderDialog, enumIndex: int):
                 eplist.append(episode_number)#append all the episode number
                 stream_urls.append(stream_urls_caller)#append the modified caller data. for more info, check the animdl_download function
             try:
-                currentEpList = settings["latest_ep"][n])+1
+                currentEpList = settings["latest_ep"][n]+1
             except KeyError:
                 shutil.rmtree('{0}animes\\{1}'.format(''.join(localAppDir), n))
                 
