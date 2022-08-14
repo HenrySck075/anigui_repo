@@ -5,7 +5,7 @@ See also:
 `http://infohost.nmt.edu/tcc/help/pubs/tkinter/web/menu-coptions.html`
 """
 
-from animdl.animdl.core.cli.commands import download
+from animdl.animdl.core.cli.commands import download#later
 import os
 from functools import partial
 import threading
@@ -28,7 +28,7 @@ settings = json.load(fr)
 class PyPlayer(tk.Frame):
     def __init__(self, container, container_instance, title=None):
         tk.Frame.__init__(self, container_instance)
-        self.seek_value = 10240 #change this if needed
+        self.seek_value = 10000 #change this if needed
         self.container = container
         self.container_instance = container_instance
         # create vlc instance
@@ -63,11 +63,6 @@ class PyPlayer(tk.Frame):
 
         # last volume value
         self.last_volume_value = 100
-
-    def _debug(self):
-        """Debugging."""
-        import pdb; pdb.set_trace()
-        pass
 
     def create_control_panel(self):
         """Add control panel."""

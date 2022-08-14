@@ -117,5 +117,5 @@ def downscript(r, content, provider, searchquery, qualinput, nameinput, sanitize
         
 #download.animdl_download(query="animixplay:5-toubun no Hanayome 2", quality="720", special=False, idm=False, download_dir="C:\\Users\\Test Chamber\\AppData\\Local\\ani-gui\\animes\\", index=1, log_level=1, id="3")
 if __name__ == "__main__":
-    print("Direct launch detected. Go away and launch main script please.")
+    print("Direct launch detected. Go away and launch main script please.")#gl
     time.sleep(5)

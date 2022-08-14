@@ -103,7 +103,7 @@ def newEpCheck(updateRemiderDialog, enumIndex: int):
                 main(0)
             
         else:
-            ans = messagebox.askyesno("New episode alert",''.join(newEpMessage))
+            ans = messagebox.askyesno("New episode alert",''.join(newEpMessage))#ask with the message
             quality = None
             if not ans:
                 main(0)
@@ -198,6 +198,7 @@ def menubar():
 
 #----------------------------------------------------------------------------------------------------
 def main(mode:int):
+    """top layout init"""
     global r
     menubar()      
     
@@ -291,6 +292,7 @@ def main_deleteMode_helper(name, tree: ttk.Treeview):
             pass
 #---------------------------------------------------------------------------------------#
 def getquery(searchbtn):
+    """get query data"""
     global qltxt, qli, proceedbtn, one, clickedquery, r, querylist
     if one == 1:
         qltxt.destroy()
@@ -317,6 +319,7 @@ def getquery(searchbtn):
         proceedbtn = Button(text="Fetch data", command=lambda: getOtherValue(searchbtn, 0, querylist)); proceedbtn.pack()
 
 def getOtherValue(searchbtn, querylist=[]):
+    """last step to download"""
     global clickedep, clickedqual, r, objects, savedaniname, two, localAppDir
     
     one == 0
@@ -355,6 +358,7 @@ def getOtherValue(searchbtn, querylist=[]):
         except: pass
         
 def getOtherValue_historyMode():
+    """last step to view history data"""
     eplist = []
     if ahsl.get() == "": return
     f = os.listdir("{0}animes\\{1}".format(''.join(localAppDir), ahsl.get()) if platform.system() == "Windows" else "{0}{1}".format(''.join(localAppDir), ahsl.get()))
@@ -406,6 +410,7 @@ def launch():
             continue
 
 def on_closing():
+    """WM_DELETE_WINDOW event"""
     try:
         thread.is_alive()
     except:
