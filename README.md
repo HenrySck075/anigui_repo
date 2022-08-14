@@ -1,2 +1,6 @@
-# anigui_repo
-basically animdl with graphical ui and more features that org one doesn't have, maybe
+# Anime Searcher GUI
+aka ani-gui or animdl_gui (i just think about this name today lol)
+
+Half baked program, fix all the issue if you like
+
+Known bugs: the code is a dumpster fire
