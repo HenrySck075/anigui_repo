@@ -14,6 +14,8 @@ from animdl.animdl.core.codebase.downloader import sanitize_filename
 from animdl.animdl.core.__version__ import __app_code__, __app_name__, __cli_core__, __core__
 from pypresence import Presence
 os.add_dll_directory(os.path.realpath(os.path.dirname(__file__)))
+
+#set the localappdata directory
 localAppDir = ""
 if platform.system() == "Windows":
     localAppDir = os.getenv('LOCALAPPDATA'), "\\ani-GUI\\"
@@ -21,9 +23,9 @@ if platform.system() == "Linux":
     localAppDir = os.getenv('HOME'), "/.ani-gui/"
 
 #994560920674107402
-downloadURL = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-client = "994560920674107402"
-def mikuloop(): 
+downloadURL = "https://www.youtube.com/watch?v=dQw4w9WgXcQ" #:skull:
+client = "994560920674107402"# yes this is an actual client id
+def mikuloop(): #junimeek
     r.resizable(False,True)
     r.protocol("WM_DELETE_WINDOW", on_closing)
     r.mainloop()
@@ -31,11 +33,11 @@ query = {}
 total = 0
 one = 0# i forgor
 two = 0# about these two variable
-enumIndex = 0
-fr = open("{}data.json".format(''.join(localAppDir)), "r", encoding="utf-8")
+enumIndex = 0# enumerate index for the episode check feature
+fr = open("{}data.json".format(''.join(localAppDir)), "r", encoding="utf-8")#forreal
 settings = json.load(fr)
 animdir = os.path.realpath(settings["settings"]["animedirectory"])
-newEpMessage = ["New episode from some anime(s) you downloaded.\nThose are:\n\n"]
+newEpMessage = ["New episode from some anime(s) you downloaded.\nThose are:\n\n"]#the dialog message list that will be later used by tk.messagebox
 newEpStreamPartial = []
 newEpStreamUrl = []
 
@@ -48,26 +50,29 @@ newEpStreamUrl = []
 # threading.Thread(target=excClear).start()
 
 def newEpCheck(updateRemiderDialog, enumIndex: int):
+    """check for new episode"""
     if settings["settings"]["autocheck"] == True:
         print("Checking for new episode, pls wait")
         animdir = os.listdir(f"{''.join(localAppDir)}\\animes") if platform.system() == "Windows" else os.listdir(f"{''.join(localAppDir)}/animes")
         for n in animdir:
-            query, total = searchmod.animdl_search_mod(query=n, provider=settings["settings"]["provider"], json=True)
+            #loop though(?) all directory name
+            query, total = searchmod.animdl_search_mod(query=n, provider=settings["settings"]["provider"], json=True)#return the querys and total anime episode
             querylist = []
             ratiolist = []
             eplist = []
             stream_urls=[]
             for re in range(total):
-                querylist.append(query[re+1]["name"])
+                querylist.append(query[re+1]["name"])#append the name list
             for item in querylist:
-                ratiolist.append(SequenceMatcher(a=n, b=item).ratio())
-            searchindex = ratiolist.index(max(ratiolist))
+                ratiolist.append(SequenceMatcher(a=n, b=item).ratio())#append all the ratio match after doing SequenceMatcher check
+            searchindex = ratiolist.index(max(ratiolist))#get the most match result
             streams = download.animdl_download(n, provider=settings['settings']['provider'], quality=720, special=False, idm=False, download_dir=f"{''.join(localAppDir)}animes", index=searchindex+1, id=1, log_level=1, epcrawlmode=True)
+            #^while it says download, that just me recycling the code to get the streams
             for count, (stream_urls_caller, episode_number) in enumerate(streams, 1):
-                eplist.append(episode_number)
-                stream_urls.append(stream_urls_caller)
+                eplist.append(episode_number)#append all the episode number
+                stream_urls.append(stream_urls_caller)#append the modified caller data. for more info, check the animdl_download function
             try:
-                currentEpList = list(range(1, int(settings["latest_ep"][n])+1))
+                currentEpList = settings["latest_ep"][n])+1
             except KeyError:
                 shutil.rmtree('{0}animes\\{1}'.format(''.join(localAppDir), n))
                 
@@ -80,9 +85,9 @@ def newEpCheck(updateRemiderDialog, enumIndex: int):
             else:
                 if max(currentEpList) < int(max(eplist)): newEpMessage.append(f"{n}:\n")
                 
-                if currentEpList.index(currentEpList[-1]) == eplist.index(eplist[-1]): pass
-                if currentEpList.index(currentEpList[-1]) < eplist.index(eplist[-1]):
-                    for ep in range(currentEpList.index(currentEpList[-1]), eplist.index(eplist[-1])):
+                if currentEpList == eplist.index(eplist[-1]): pass
+                if currentEpList < eplist.index(eplist[-1]):
+                    for ep in range(currentEpList, eplist.index(eplist[-1])):
                         enumIndex += 1
                         newEpMessage.append(f"• Episode {eplist[ep+1]}\n")
                         newEpStreamPartial.append((stream_urls[ep+1], eplist[ep+1], enumIndex))
