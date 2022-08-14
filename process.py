@@ -94,6 +94,7 @@ class down():
             downscript(widget, content, provider, searchquery, qualinput, nameinput, sanitizeddirectory, justdownload, infile, idx, epinput, stream_url)
 
 def downscript(r, content, provider, searchquery, qualinput, nameinput, sanitizeddirectory, justdownload, infile, idx, epinput, stream_url): #im tired
+    """Download script so no copypastea"""
     try:
         RPC.update(**content)
     except:
