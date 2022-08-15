@@ -7,3 +7,9 @@ This project is come with a modified version of animdl client, so update everyth
 # Known bugs
 - the code is a dumpster fire
 - vlc where
+
+# How to use
+- git clone https://github.com/HenrySck075/anigui_repo/ (your folder)
+- run killbot.py (no shit gd referrence)
+
+<p style="color:rgb(FF,57,33);">go touch grass</p>
