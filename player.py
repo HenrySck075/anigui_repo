@@ -81,10 +81,13 @@ class PyPlayer(tk.Frame):
 
         playback_bar = ttk.Frame(self.container_instance)
 
-        current_time = tk.Label(root.tk_instance, text="00:00   ", background="black"); current_time.pack(side=tk.LEFT)
-        total_time = tk.Label(root.tk_instance, text="   00:00", background="black"); total_time.pack(side=tk.RIGHT)
+        playback_subframe_time = ttk.Frame(self.container_instance, width=8)
+        current_time = tk.Label(playback_subframe_time, text="0:00:00   ", background="black"); current_time.pack(side=tk.LEFT)
+        playback_subframe_length = ttk.Frame(self.container_instance, width=8)
+        total_time = tk.Label(playback_subframe_length, text="   0:00:00", background="black"); total_time.pack(side=tk.RIGHT)
         scale = tk.Scale(root.tk_instance, variable = var , orient=tk.HORIZONTAL, resolution=0.01, background="black", showvalue=0); scale.pack(fill="both")
         
+        playback_subframe_time.pack(side=tk.LEFT), playback_subframe_length.pack(side=tk.RIGHT)
         playback_bar.pack(side=tk.BOTTOM)
         control_panel.pack(side=tk.BOTTOM)
 
@@ -237,8 +240,7 @@ class PyPlayer(tk.Frame):
     def volume_value_display(self):
         while True:
             vol = self.volume.get()
-            print("e")
-            self.volvalue.config(text=str(vol))
+            self.volvalue.config(text=str(int(vol)))
             time.sleep(0.08)
 
     def volume_update(self):
@@ -302,5 +304,6 @@ def create(file, url=None):
     else:
         player.play_film(url=url)
     root.tk_instance.mainloop()
-if __name__ == "__main_-":
+
+if __name__ == "__main__":
     create(r"C:\Users\HenryS\AppData\Local\ani-GUI\animes\5-toubun no Hanayome 2\E04.ts")

@@ -1,4 +1,5 @@
 #help
+from genericpath import isdir
 import sys
 
 sys.dont_write_bytecode = True
@@ -242,9 +243,14 @@ def main_historyMode():
     """History script"""
     global r, ahsl 
     ahsl = StringVar()
-
-
+    waitlist = []
     drop = os.listdir("{}animes".format(''.join(localAppDir)))
+    for i in range(len(drop)):
+        if not os.path.isdir(f"{animdir}\\{drop[i]}" if platform.system() == "Windows" else f"{animdir}/{drop[i]}"):
+            waitlist.append(i)
+            print(drop[i])
+    for i in range(len(waitlist)):
+        del drop[waitlist[-(i+1)]]
     Label(text="select the anime you downloaded here", font=("arial", 13)).pack()
     aniname = OptionMenu(r, ahsl, *drop)
     aniname.pack()
@@ -320,7 +326,7 @@ def getquery(searchbtn):
         clickedquery = StringVar()
         qli = OptionMenu(r, clickedquery, *querylist); qli.pack()
         clickedquery.set(querylist[0])
-        proceedbtn = Button(text="Fetch data", command=lambda: getOtherValue(searchbtn, 0, querylist)); proceedbtn.pack()
+        proceedbtn = Button(text="Fetch data", command=lambda: getOtherValue(searchbtn, querylist)); proceedbtn.pack()
 
 def getOtherValue(searchbtn, querylist=[]):
     """last step to download"""
