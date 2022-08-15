@@ -1,5 +1,8 @@
-import logging
 import sys
+
+sys.dont_write_bytecode = True
+
+import logging
 from urllib.parse import quote, urlencode
 
 import httpx

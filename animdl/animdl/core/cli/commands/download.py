@@ -1,3 +1,7 @@
+import sys
+
+sys.dont_write_bytecode = True
+
 import logging
 from pathlib import Path
 

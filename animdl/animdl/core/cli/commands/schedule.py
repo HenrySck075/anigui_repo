@@ -1,3 +1,7 @@
+import sys
+
+sys.dont_write_bytecode = True
+
 import time
 from collections import defaultdict
 from datetime import datetime

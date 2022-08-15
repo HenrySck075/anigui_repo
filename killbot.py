@@ -1,7 +1,11 @@
 #help
+import sys
+
+sys.dont_write_bytecode = True
+
 import time
 starttime = time.time()
-import player, keyboard, shutil, re as RegEx, threading, platform, os, psutil, json
+import player, shutil, re as RegEx, threading, platform, os, psutil, json
 from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox

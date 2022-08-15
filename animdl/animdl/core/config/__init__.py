@@ -1,5 +1,8 @@
-import os
 import sys
+
+sys.dont_write_bytecode = True
+
+import os
 from pathlib import Path
 
 import yaml

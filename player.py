@@ -4,8 +4,11 @@ See also:
 `http://infohost.nmt.edu/tcc/help/pubs/tkinter/web/menu.html`
 `http://infohost.nmt.edu/tcc/help/pubs/tkinter/web/menu-coptions.html`
 """
+import sys
 
-from animdl.animdl.core.cli.commands import download#later
+sys.dont_write_bytecode = True
+
+#from animdl.animdl.core.cli.commands import download   #later
 import os
 from functools import partial
 import threading
@@ -299,4 +302,5 @@ def create(file, url=None):
     else:
         player.play_film(url=url)
     root.tk_instance.mainloop()
-create(r"C:\Users\HenryS\AppData\Local\ani-GUI\animes\5-toubun no Hanayome 2\E04.ts")
+if __name__ == "__main_-":
+    create(r"C:\Users\HenryS\AppData\Local\ani-GUI\animes\5-toubun no Hanayome 2\E04.ts")
