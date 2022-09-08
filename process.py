@@ -1,10 +1,13 @@
 #if this one errored out, there's a high chance you have missing argument or the anime unavailable on the server
 
+import sys
+import threading
 from tkinter import *
-import os, time, psutil, platform, json
-import player
+import os, time, psutil, platform, json, player
+from io import StringIO
 from pypresence import Presence
 from animdl.animdl.core.cli.commands import download, stream
+timesup = False #stop the thread
 
 def checkIfProcessRunning(processName):
     '''
@@ -93,6 +96,18 @@ class down():
         else:
             downscript(widget, content, provider, searchquery, qualinput, nameinput, sanitizeddirectory, justdownload, infile, idx, epinput, stream_url)
 
+def _downscript_display_console():
+    console = Toplevel()
+    Label(console, text="Processing...")
+    box = Text(console, state=DISABLED); box.pack()
+    while True:
+        sys.stdout = out = StringIO()
+        box.delete("1.0", "end-1c")
+        box.insert(INSERT, out)
+        time.sleep(0.008)
+        if timesup:
+            console.destroy()
+
 def downscript(r, content, provider, searchquery, qualinput, nameinput, sanitizeddirectory, justdownload, infile, idx, epinput, stream_url): #im tired
     """Download script so no copypastea"""
     try:
@@ -100,23 +115,27 @@ def downscript(r, content, provider, searchquery, qualinput, nameinput, sanitize
     except:
         pass
     if not settings["settings"]["ihavenomorediskspace"]:
-        download.animdl_download(query="{0}:{1}".format(provider, searchquery), provider=provider, special=False, quality=qualinput, download_dir="{}animes\\".format(''.join(localAppDir)), idm=False, index=idx, id=int(epinput), log_level=1, epcrawlmode=False)
+        threading.Thread(target=_downscript_display_console, daemon=True).start()
+        download.animdl_download(query="{0}:{1}".format(provider, searchquery), provider=provider, special=False, quality=qualinput, download_dir="{}animes\\".format(''.join(localAppDir)), idm=False, index=idx, id=int(epinput), log_level=0, epcrawlmode=False)
     else:
-        streams = download.animdl_download(query="{0}:{1}".format(provider, searchquery), provider=provider, special=False, quality=qualinput, download_dir="{}animes\\".format(''.join(localAppDir)), idm=False, index=idx, id=int(epinput), log_level=1, epcrawlmode=True)
-        for count, (stream_caller, number) in enumerate(streams, 1):
-            if count == int(epinput):
-                player.create(None, stream_caller())
+        pass
+        # streams = download.animdl_download(query="{0}:{1}".format(provider, searchquery), provider=provider, special=False, quality=qualinput, download_dir="{}animes\\".format(''.join(localAppDir)), idm=False, index=idx, id=int(epinput), log_level=1, epcrawlmode=True)
+        # for count, (stream_caller, number) in enumerate(streams, 1):
+        #     if count == int(epinput):
+        #         player.create(None, stream_caller())
     with open("{}data.json".format(''.join(localAppDir)), "r") as data:
         array = json.load(data)
-        if array["latest_ep"][nameinput] != "undefined": pass
-        if not nameinput in array["latest_ep"]: array["latest_ep"][nameinput] = "undefined"
+        try:
+            if array["latest_ep"][nameinput] != "undefined": pass
+            if not nameinput in array["latest_ep"]: array["latest_ep"][nameinput] = "undefined"
+        except KeyError:
+            array["latest_ep"][nameinput] = "undefined"
     with open("{}data.json".format(''.join(localAppDir)), "w") as writedata:
         json.dump(array, writedata, indent=4)
         writedata.close()
     if justdownload: pass
     if not justdownload: play.stream(r, sanitizeddirectory, ''.join(infile))
-        
-#download.animdl_download(query="animixplay:5-toubun no Hanayome 2", quality="720", special=False, idm=False, download_dir="C:\\Users\\Test Chamber\\AppData\\Local\\ani-gui\\animes\\", index=1, log_level=1, id="3")
+
 if __name__ == "__main__":
     print("Direct launch detected. Go away and launch main script please.")#gl
     time.sleep(5)

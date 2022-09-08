@@ -28,7 +28,7 @@ from .. import exit_codes, helpers, http_client
 # @helpers.decorators.logging_options()
 # @helpers.decorators.setup_loggers()
 def animdl_download(
-    query, provider, special, quality, download_dir, idm, index, log_level, id, epcrawlmode, custom_streams_list:bool=False, anime=None, streams=()#if custom_streams_list is not None else overwrite these variable
+    query, provider, special, quality, download_dir, idm, index, log_level, id, epcrawlmode, custom_streams_list:bool=False, anime=None, streams=(), _updateTemp_itemName=""#if custom_streams_list is True else overwrite these variable
 ):  
 
     logger = logging.getLogger("downloader")
@@ -67,7 +67,7 @@ def animdl_download(
         if not custom_streams_list:
             for count, (stream_urls_caller, episode_number) in enumerate(streams, 1):
                 if count == id:
-                    content_title = "E{:02d}".format(int(episode_number))
+                    content_title = "{}E{:02d}".format(_updateTemp_itemName if custom_streams_list else "", int(episode_number))
                     stream_urls = helpers.ensure_extraction(http_client.client, stream_urls_caller)
 
                     if not stream_urls:

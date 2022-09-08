@@ -1,5 +1,4 @@
 #help
-from genericpath import isdir
 import sys
 
 sys.dont_write_bytecode = True
@@ -28,10 +27,9 @@ if platform.system() == "Linux":
     localAppDir = os.getenv('HOME'), "/.ani-gui/"
 
 #994560920674107402
-downloadURL = "https://www.youtube.com/watch?v=dQw4w9WgXcQ" #:skull:
+downloadURL = "https://www.youtube.com/watch?v=vV-5W7SFHDc" #idk
 client = "994560920674107402"# yes this is an actual client id
 def mikuloop(): #junimeek
-    r.resizable(False,True)
     r.protocol("WM_DELETE_WINDOW", on_closing)
     r.mainloop()
 query = {}
@@ -55,6 +53,7 @@ newEpStreamUrl = []
 # threading.Thread(target=excClear).start()
 
 def newEpCheck(updateRemiderDialog, enumIndex: int):
+    newEpName=[]
     """check for new episode"""
     if settings["settings"]["autocheck"] == True:
         print("Checking for new episode, pls wait")
@@ -77,21 +76,25 @@ def newEpCheck(updateRemiderDialog, enumIndex: int):
                 eplist.append(episode_number)#append all the episode number
                 stream_urls.append(stream_urls_caller)#append the modified caller data. for more info, check the animdl_download function
             try:
-                currentEpList = settings["latest_ep"][n]+1
+                currentEpList = settings["latest_ep"][n]
             except KeyError:
-                shutil.rmtree('{0}animes\\{1}'.format(''.join(localAppDir), n))
+                try:
+                    shutil.rmtree('{0}animes\\{1}'.format(''.join(localAppDir), n))
+                except NotADirectoryError: os.remove('{0}animes\\{1}'.format(''.join(localAppDir), n))
                 
             except ValueError:#probably undefined string
-                settings['latest_ep'][n] = str(eplist[-1])
+                settings['latest_ep'][n] = eplist[-1]
                 with open("{}data.json".format(''.join(localAppDir)), "w", encoding="utf-8") as fw:
                     json.dump(settings, fw, indent=4)
                     fw.close()
                 
             else:
-                if max(currentEpList) < int(max(eplist)): newEpMessage.append(f"{n}:\n")
+                print(max(eplist))
+                if currentEpList < int(max(eplist)): newEpMessage.append(f"{n}:\n"); newEpName.append(n)
                 
-                if currentEpList == eplist.index(eplist[-1]): pass
+                if currentEpList == eplist.index(eplist[-1]): print(f"{currentEpList} {eplist.index(eplist[-1])}")
                 if currentEpList < eplist.index(eplist[-1]):
+                    print(f"{currentEpList} {eplist.index(eplist[-1])}")
                     for ep in range(currentEpList, eplist.index(eplist[-1])):
                         enumIndex += 1
                         newEpMessage.append(f"• Episode {eplist[ep+1]}\n")
@@ -121,9 +124,9 @@ def newEpCheck(updateRemiderDialog, enumIndex: int):
                         
                         print(newEpStreamPartial)
                         
-                        download.animdl_download(query="use stream url", provider=settings["settings"]["provider"], quality=quality, special=False, idm=False, download_dir=f"{''.join(localAppDir)}updateTemp\\", index=0, id=0, log_level=1, epcrawlmode=False, custom_streams_list=True, anime=n, streams=newEpStreamPartial)
+                        download.animdl_download(query="use stream url", provider=settings["settings"]["provider"], quality=quality, special=False, idm=False, download_dir=f"{''.join(localAppDir)}updateTemp\\", index=0, id=0, log_level=1, epcrawlmode=False, custom_streams_list=True, anime=n, streams=newEpStreamPartial, _updateTemp_itemName=f"{n} - ")
                     
-                settings['latest_ep'][n] = eplist[-1]
+                settings['latest_ep'][n] = int(eplist[-1])
                 with open("{}data.json".format(''.join(localAppDir)), "w", encoding="utf-8") as fw:
                     json.dump(settings, fw, indent=4)
                     fw.close()
@@ -154,11 +157,12 @@ def connectToDiscord():
     else: pass
 connectToDiscord()
 r = Tk()
+r.resizable(False,True)
 r.title('Anime Searcher GUI. © HenrySck075, All Rights Reserved (maybe).')
 
 objects = []
 s=time.time() - starttime
-print(f"Welcome to Anime Searcher GUI. \nThis will be the place to track your downloads info. \nI'll work on intergrating this to tkinter windows later. \nModule import time: {s}")
+print(f"Module import time: {s}")
 #--------------------------------------------------------------------------------------------------------------
 #initialize section
 def yes(booltype: bool):
@@ -284,13 +288,18 @@ def main_deleteMode():
                 e2 = e2.replace(".ts", "")
                 e2 = e2.replace(".mp4", "")
                 e2 = e2.replace("E", "")
-                tree.insert("", END, text="{:d}".format(int(e2)), iid=iid, values=[f"{''.join(animdir)}\{n}\{e}" if platform.system() == "Windows" else f"{''.join(animdir)}/{n}/{e}"])
+                try:
+                    tree.insert("", END, text="{:d}".format(int(e2)), iid=iid, values=[f"{''.join(animdir)}\{n}\{e}" if platform.system() == "Windows" else f"{''.join(animdir)}/{n}/{e}"])
+                except:
+                    iid-=1
                 #print(f"{iid}, {parentid}, {childidx}")
-                tree.move(iid, parentid, childidx)
-                childidx += 1
+                else:
+                    tree.move(iid, parentid, childidx)
+                    childidx += 1
         iid += 1
     tree.bind("<<TreeviewSelect>>", lambda x=None: main_deleteMode_helper(drop, tree))
     Label(text="delete some offline movie to save space", font=("arial", 11)).pack()
+    Label(text="some searched online won't be listed here ofc", font=("arial", 8)).pack()
     tree.pack()
 
 def main_deleteMode_helper(name, tree: ttk.Treeview):   

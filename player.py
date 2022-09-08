@@ -157,7 +157,7 @@ class PyPlayer(tk.Frame):
         self.vlc_media_player_instance.set_hwnd(self.get_handle())
         self.vlc_media_player_instance.audio_set_volume(100)
         self.play()
-        time.sleep(0.1)#wait for the whole media to load to get the length or it will return 0, whyy
+        time.sleep(0.2)#wait for the whole media to load to get the length or it will return 0, whyy
         length = int(self.vlc_media_player_instance.get_length())
         
         threading.Thread(target=self.update_value, daemon=True).start()
