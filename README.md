@@ -10,6 +10,6 @@ This project is come with a modified version of animdl client, so update everyth
 
 # How to use
 - git clone https://github.com/HenrySck075/anigui_repo/ (your folder)
-- run main.py (no shit gd referrence)
+- run main.py
 
 <p style="color:rgb(FF,57,33);">this should be colored</p>
