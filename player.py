@@ -13,6 +13,7 @@ import os
 from functools import partial
 import threading
 import time
+import datetime
 from animdl.animdl.core.__version__ import __app_code__, __app_name__, __cli_core__, __core__
 from tkinter import messagebox
 
@@ -203,18 +204,19 @@ class PyPlayer(tk.Frame):
                 except: pass
     
     def _update_time(self, SecToConvert):
-        """Return the time format"""
-        while True:
-            RemainingSec = SecToConvert % (24 * 3600)
+        """Return the time format
+        also henry i hate you so much datetime module exist"""
+        dt = datetime.datetime.utcfromtimestamp(SecToConvert)
+        
+        #no anime episode really have a length of a day
+        #so we dont really need to care about days that much
+        
+        ret = f"{dt.minute}:{dt.second}"
+        if dt.hour > 0:
+            ret = dt.hour + ":" + ret
+        
+        return ret
 
-            HoursGet = RemainingSec // 3600
-
-            RemainingSec %= 3600
-
-            MinutesGet = RemainingSec // 60
-
-            RemainingSec %= 60
-            return "%d:%02d:%02d" % (HoursGet, MinutesGet, RemainingSec)
 
     def update_current_time(self):
         """Update the current time label"""
@@ -305,5 +307,7 @@ def create(file, url=None):
         player.play_film(url=url)
     root.tk_instance.mainloop()
 
+    
+#test
 if __name__ == "__main__":
     create(r"C:\Users\HenryS\AppData\Local\ani-GUI\animes\5-toubun no Hanayome 2\E04.ts")
